@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>ColecionaAí · Figurinhas Copa 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html{font-size:16px;overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#0a0f0d;color:#f0f4f0;overflow-x:hidden;width:100%;-webkit-text-size-adjust:100%;}
+#app{width:100%;max-width:100vw;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* Login */
+.login-wrap{min-height:100svh;display:flex;align-items:center;justify-content:center;background:#0a0f0d;padding:24px 16px;position:relative;overflow:hidden;}
+.deco{font-family:'Bebas Neue',sans-serif;font-size:min(45vw,260px);color:rgba(0,200,83,0.045);position:absolute;right:-8px;bottom:-16px;line-height:1;pointer-events:none;letter-spacing:-4px;z-index:0;}
+.login-card{background:#111a14;border:1px solid #2a3d2e;border-radius:20px;padding:28px 24px;width:100%;max-width:340px;position:relative;z-index:1;}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.ball{width:40px;height:40px;min-width:40px;border-radius:50%;background:#00c853;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.login-h1{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;color:#f0f4f0;}
+.login-h2{font-size:12px;color:#6b8570;margin-bottom:24px;padding-left:50px;margin-top:2px;}
+.f-label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b8570;margin-bottom:8px;}
+.f-wrap{margin-bottom:16px;}
+.f-input{display:block;width:100%;background:#0d1a10;border:1.5px solid #2a3d2e;border-radius:10px;padding:14px 16px;font-size:16px;line-height:1.4;color:#f0f4f0;font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .2s;}
+.f-input:focus{border-color:#00c853;}
+.f-input::placeholder{color:#3a5240;}
+.btn-login{display:block;width:100%;height:56px;padding:0;margin-top:10px;background:#00c853;color:#041208;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:manipulation;position:relative;z-index:10;outline:none;user-select:none;-webkit-user-select:none;}
+.btn-login:active{background:#00a844;}
+.login-err{font-size:13px;color:#ff6b6b;min-height:20px;text-align:center;margin-top:12px;}
+
+/* Header */
+.hdr{background:#070e09;border-bottom:1px solid #2a3d2e;padding:0 16px;position:sticky;top:0;z-index:50;}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:8px;flex-wrap:wrap;}
+.hdr-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(15px,4vw,19px);letter-spacing:1.5px;line-height:1.1;}
+.hdr-title em{color:#00c853;font-style:normal;}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.badge{font-size:12px;font-weight:600;background:#162019;border:1px solid #2a3d2e;border-radius:20px;padding:6px 13px;color:#00c853;}
+.btn-sair{height:34px;padding:0 14px;cursor:pointer;background:transparent;border:1px solid #2a3d2e;border-radius:20px;color:#6b8570;font-size:12px;font-family:'DM Sans',sans-serif;touch-action:manipulation;-webkit-appearance:none;appearance:none;}
+.btn-sair:active{background:#1a2b1e;}
+
+/* Stats */
+.stats{padding:12px 16px 0;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.sc{background:#111a14;border:1px solid #2a3d2e;border-radius:10px;padding:10px 10px 8px;}
+.sc .n{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,5vw,24px);line-height:1;}
+.sc.g .n{color:#00c853;}
+.sc.gold .n{color:#ffd600;}
+.sc .l{font-size:10px;color:#6b8570;margin-top:2px;font-weight:500;}
+.prog{margin-bottom:10px;}
+.prog-track{height:6px;background:#1a2b1e;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#00952e,#00c853);border-radius:3px;transition:width .35s ease;}
+.prog-row{display:flex;justify-content:space-between;margin-top:4px;}
+.prog-row span{font-size:10px;color:#6b8570;}
+
+/* Album Grid */
+.grid-wrap{padding:8px 16px 100px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:10px;}
+.gc-card{background:#1a2b1e;border:1px solid #2a3d2e;border-radius:14px;overflow:hidden;}
+.gc-head{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a3d2e;}
+.gc-left{display:flex;align-items:center;gap:8px;}
+.gc-letter{font-family:'Bebas Neue',sans-serif;font-size:18px;line-height:1;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gc-name{font-size:13px;font-weight:600;}
+.gc-prog{font-size:11px;color:#6b8570;}
+.sel{padding:8px 12px 10px;border-top:1px solid #1e2e22;}
+.sel-n{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#6b8570;margin-bottom:6px;}
+.figs{display:flex;flex-wrap:wrap;gap:5px;}
+.fb{width:34px;height:34px;border-radius:7px;border:1px solid #263a2a;background:#111e14;color:#3d5e42;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-appearance:none;appearance:none;}
+.fb:active{opacity:.7;}
+.fb.have{background:#b71c1c;border:2px solid #ff1744;color:#fff;font-weight:700;font-size:12px;transform:scale(1.1);box-shadow:0 0 0 2px rgba(255,23,68,.35),0 0 10px rgba(255,23,68,.5);position:relative;z-index:2;}
+.fb.have:active{transform:scale(1.0);}
+
+/* Group colors */
+.ga .gc-letter{background:#0d2e4a;color:#4ab3f4;}
+.gb .gc-letter{background:#1a2e0d;color:#7ec850;}
+.gc2 .gc-letter{background:#2e1a0d;color:#f4944a;}
+.gd .gc-letter{background:#2a0d2e;color:#c46af4;}
+.ge .gc-letter{background:#0d2a2a;color:#4af4e0;}
+.gf .gc-letter{background:#2e2700;color:#f4d03f;}
+.gg .gc-letter{background:#2e0d1a;color:#f44a8a;}
+.gh .gc-letter{background:#0d2e4a;color:#4ab3f4;}
+.gi .gc-letter{background:#1e2000;color:#ccd647;}
+.gj .gc-letter{background:#1a2e0d;color:#7ec850;}
+.gk .gc-letter{background:#2a0d2e;color:#c46af4;}
+.gl .gc-letter{background:#0d2a2a;color:#4af4e0;}
+.gx .gc-letter{background:#2e2700;color:#ffd600;}
+.gz .gc-letter{background:#2e0a0a;color:#ff4444;}
+
+/* ── Bottom Nav ── */
+.bot-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#070e09;border-top:1px solid #2a3d2e;
+  display:none;z-index:100;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.bot-nav.visible{display:flex;}
+.bnav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:10px 4px 8px;
+  background:transparent;border:none;color:#6b8570;
+  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;
+  letter-spacing:.04em;cursor:pointer;touch-action:manipulation;
+  -webkit-appearance:none;appearance:none;gap:3px;
+  transition:color .15s;-webkit-user-select:none;user-select:none;
+}
+.bnav-btn.active{color:#00c853;}
+.bnav-icon{font-size:19px;line-height:1;}
+
+/* ── Tab panes ── */
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+.tab-inner{padding:16px 16px 100px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:#f0f4f0;margin-bottom:16px;}
+
+/* ── $ Tab ── */
+.pac-card{background:#111a14;border:1px solid #2a3d2e;border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;}
+.pac-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b8570;margin-bottom:16px;}
+.pac-counter{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.pac-btn{width:52px;height:52px;border-radius:14px;border:2px solid #2a3d2e;background:#0d1a10;color:#00c853;font-size:28px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-user-select:none;user-select:none;transition:background .15s;}
+.pac-btn:active{background:#1a2b1e;}
+.pac-btn-10{height:34px;padding:0 12px;border-radius:10px;border:1.5px solid #2a3d2e;background:#0d1a10;color:#6b8570;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-user-select:none;user-select:none;}
+.pac-btn-10:active{background:#1a2b1e;}
+.pac-num{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:1;color:#00c853;min-width:90px;}
+.pac-divider{height:1px;background:#2a3d2e;margin:0 0 20px;}
+.pac-total{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:1px;color:#ffd600;line-height:1;}
+.pac-total-label{font-size:12px;color:#6b8570;margin-top:4px;}
+.pac-quick-row{display:flex;justify-content:center;gap:8px;margin-bottom:12px;}
+.pac-info-row{display:flex;gap:10px;margin-top:16px;}
+.pac-info{flex:1;background:#0d1a10;border:1px solid #2a3d2e;border-radius:10px;padding:12px;text-align:center;}
+.pac-info .pn{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#4af4e0;}
+.pac-info .pl{font-size:10px;color:#6b8570;margin-top:2px;}
+.pac-tip{background:#111a14;border:1px solid #2a3d2e;border-radius:12px;padding:14px 16px;font-size:12px;color:#6b8570;line-height:1.7;}
+.pac-tip strong{color:#f0f4f0;}
+
+/* ── Troca Tab ── */
+.troca-section{background:#111a14;border:1px solid #2a3d2e;border-radius:16px;padding:20px;margin-bottom:16px;}
+.troca-section-title{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b8570;margin-bottom:14px;}
+.troca-row{display:flex;gap:10px;margin-bottom:12px;align-items:flex-end;flex-wrap:wrap;}
+.troca-field{flex:1;min-width:120px;}
+.troca-field label{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#6b8570;margin-bottom:6px;}
+.troca-select{display:block;width:100%;background:#0d1a10;border:1.5px solid #2a3d2e;border-radius:10px;padding:12px 14px;font-size:14px;color:#f0f4f0;font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;transition:border-color .2s;}
+.troca-select:focus{border-color:#00c853;}
+.btn-verificar{display:block;width:100%;height:50px;background:#00c853;color:#041208;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;-webkit-appearance:none;appearance:none;margin-bottom:10px;}
+.btn-verificar:active{background:#00a844;}
+.troca-result{text-align:center;font-size:15px;font-weight:600;padding:16px 14px;border-radius:10px;background:#0d1a10;border:1px solid #2a3d2e;color:#6b8570;min-height:54px;display:flex;align-items:center;justify-content:center;line-height:1.5;}
+.btn-export{display:block;width:100%;height:54px;background:#162019;border:2px solid #2a3d2e;border-radius:12px;color:#f0f4f0;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;-webkit-appearance:none;appearance:none;transition:border-color .2s,background .2s;margin-bottom:10px;}
+.btn-export:active{background:#1e3024;}
+.export-msg{text-align:center;font-size:13px;color:#00c853;min-height:20px;font-weight:600;}
+.export-preview{background:#0d1a10;border:1px solid #2a3d2e;border-radius:10px;padding:14px;margin-top:12px;font-family:monospace;font-size:11px;color:#a0b8a4;line-height:1.75;max-height:220px;overflow-y:auto;display:none;white-space:pre;}
+.export-preview.show{display:block;}
+
+/* ── Andamento Tab ── */
+.and-filter{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.and-filter::-webkit-scrollbar{display:none;}
+.and-chip{padding:8px 16px;border-radius:20px;border:1px solid #2a3d2e;background:#111a14;color:#6b8570;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;-webkit-appearance:none;appearance:none;-webkit-user-select:none;user-select:none;flex-shrink:0;}
+.and-chip.active{background:#00c853;border-color:#00c853;color:#041208;}
+.and-group-card{background:#1a2b1e;border:1px solid #2a3d2e;border-radius:14px;overflow:hidden;margin-bottom:10px;}
+.and-complete-badge{font-size:11px;font-weight:700;background:#00c853;color:#041208;border-radius:20px;padding:4px 10px;}
+.and-sel-block{padding:10px 12px;border-top:1px solid #1e2e22;}
+.and-sel-name{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b8570;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.and-missing{font-size:12px;color:#ff8888;line-height:1.65;margin-bottom:4px;}
+.and-have{font-size:12px;color:#4b7052;line-height:1.65;}
+
+/* Inapp warn */
+#inapp-warn{display:none;position:fixed;inset:0;z-index:9999;background:#0a0f0d;align-items:center;justify-content:center;padding:24px;}
+#inapp-warn.show{display:flex;}
+.warn-box{background:#111a14;border:1px solid #2a3d2e;border-radius:20px;padding:32px 24px;width:100%;max-width:340px;text-align:center;}
+.warn-icon{font-size:48px;margin-bottom:16px;}
+.warn-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:#f0f4f0;margin-bottom:10px;}
+.warn-txt{font-size:14px;color:#6b8570;line-height:1.6;margin-bottom:24px;}
+.warn-txt strong{color:#f0f4f0;}
+.warn-steps{background:#0d1a10;border-radius:12px;padding:16px;text-align:left;margin-bottom:20px;}
+.warn-steps p{font-size:13px;color:#a0b8a4;line-height:1.7;margin:0;}
+.warn-steps span{color:#00c853;font-weight:700;}
+
+@media(max-width:380px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .fb{width:31px;height:31px;font-size:10px;}
+  .fb.have{font-size:11px;}
+  .login-card{padding:22px 18px;}
+  .pac-num{font-size:56px;}
+  .pac-total{font-size:34px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Aviso navegador interno -->
+<div id="inapp-warn">
+  <div class="warn-box">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Abra no Navegador</div>
+    <p class="warn-txt">Este app está sendo aberto dentro do <strong>WhatsApp / Telegram</strong>, que bloqueia JavaScript e impede o funcionamento.</p>
+    <div class="warn-steps">
+      <p>
+        <span>1.</span> Toque nos <strong>3 pontinhos</strong> (⋮) no canto superior direito<br>
+        <span>2.</span> Escolha <strong>"Abrir no navegador"</strong> ou<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<strong>"Abrir no Chrome"</strong> / <strong>"Safari"</strong><br>
+        <span>3.</span> Se não aparecer essa opção, <strong>baixe o arquivo</strong> e abra pelo gerenciador
+      </p>
+    </div>
+    <p style="font-size:12px;color:#3a5240;">Após abrir no navegador, tudo funcionará normalmente ✅</p>
+  </div>
+</div>
+
+<div id="app">
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="scr-login" class="screen active">
+  <div class="login-wrap">
+    <div class="deco">2026</div>
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="ball">⚽</div>
+        <div class="login-h1">ColecionaAí</div>
+      </div>
+      <p class="login-h2">Controle de Figurinhas · Copa 2026</p>
+      <div class="f-wrap">
+        <label class="f-label" for="inp-u">Usuário</label>
+        <input class="f-input" id="inp-u" type="text" placeholder=""
+          autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"/>
+      </div>
+      <div class="f-wrap">
+        <label class="f-label" for="inp-p">Senha</label>
+        <input class="f-input" id="inp-p" type="tel" placeholder=""
+          inputmode="numeric" maxlength="4" autocomplete="off"/>
+      </div>
+      <button class="btn-login" id="btn-login" onclick="doLogin()">ENTRAR</button>
+      <p class="login-err" id="login-err"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ÁLBUM ═══════════════ -->
+<div id="scr-album" class="screen">
+
+  <!-- Header fixo -->
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="hdr-title">⚽ COLECIONAÍ <em>COPA 2026</em></div>
+      <div class="hdr-right">
+        <span class="badge" id="lbl-user">—</span>
+        <button class="btn-sair" id="btn-sair" onclick="doLogout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Tab: Álbum ─── -->
+  <div id="tab-album" class="tab-pane active">
+    <div class="stats">
+      <div class="stats-grid">
+        <div class="sc g"><div class="n" id="s-have">0</div><div class="l">Tenho</div></div>
+        <div class="sc"><div class="n" id="s-miss">994</div><div class="l">Faltando</div></div>
+        <div class="sc"><div class="n">994</div><div class="l">Total</div></div>
+        <div class="sc gold"><div class="n" id="s-pct">0%</div><div class="l">Completo</div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+        <div class="prog-row"><span id="prog-txt">0 de 994</span><span id="prog-pct">0%</span></div>
+      </div>
+    </div>
+    <div class="grid-wrap">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <!-- ─── Tab: $ Investimento ─── -->
+  <div id="tab-dinheiro" class="tab-pane">
+    <div class="tab-inner">
+      <div class="section-title">💰 Investimento</div>
+
+      <div class="pac-card">
+        <div class="pac-label">Pacotinhos Comprados</div>
+        <div class="pac-counter">
+          <button class="pac-btn" onclick="changePacotes(-1)" aria-label="Diminuir">−</button>
+          <div class="pac-num" id="pac-count">0</div>
+          <button class="pac-btn" onclick="changePacotes(1)" aria-label="Aumentar">+</button>
+        </div>
+        <div class="pac-quick-row">
+          <button class="pac-btn-10" onclick="changePacotes(-10)">−10</button>
+          <button class="pac-btn-10" onclick="changePacotes(-5)">−5</button>
+          <button class="pac-btn-10" onclick="changePacotes(5)">+5</button>
+          <button class="pac-btn-10" onclick="changePacotes(10)">+10</button>
+        </div>
+        <div class="pac-divider"></div>
+        <div class="pac-total" id="pac-total">R$&nbsp;0,00</div>
+        <div class="pac-total-label">total investido</div>
+        <div class="pac-info-row">
+          <div class="pac-info">
+            <div class="pn" id="pac-figs">~0</div>
+            <div class="pl">Figs. estimadas</div>
+          </div>
+          <div class="pac-info">
+            <div class="pn" id="pac-have2">0</div>
+            <div class="pl">Coladas no álbum</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pac-tip">
+        📦 Cada pacotinho contém <strong>7 figurinhas</strong> e custa <strong style="color:#ffd600">R$&nbsp;7,00</strong>.<br>
+        Para completar o álbum você precisaria de ~<strong>205 pacotinhos</strong> no modo sorte — mas a troca é o segredo! 😄
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Tab: Troca ─── -->
+  <div id="tab-troca" class="tab-pane">
+    <div class="tab-inner">
+      <div class="section-title">🔄 Troca</div>
+
+      <!-- Consulta rápida -->
+      <div class="troca-section">
+        <div class="troca-section-title">🔍 Consultar Figurinha</div>
+        <div class="troca-row">
+          <div class="troca-field">
+            <label for="troca-sel">Seleção</label>
+            <select class="troca-select" id="troca-sel" onchange="updateTrocaNumbers()"></select>
+          </div>
+          <div class="troca-field" style="max-width:90px;">
+            <label for="troca-num">Nº</label>
+            <select class="troca-select" id="troca-num"></select>
+          </div>
+        </div>
+        <button class="btn-verificar" onclick="searchTroca()">VERIFICAR</button>
+        <div class="troca-result" id="troca-result">Selecione e clique em verificar</div>
+      </div>
+
+      <!-- Exportar lista -->
+      <div class="troca-section">
+        <div class="troca-section-title">📤 Exportar Lista para Troca</div>
+        <p style="font-size:13px;color:#6b8570;margin-bottom:14px;line-height:1.6;">
+          Gera uma lista completa com ✅ as que você <strong style="color:#f0f4f0">tem</strong> e ❌ as que <strong style="color:#f0f4f0">faltam</strong> — perfeito para compartilhar no grupo!
+        </p>
+        <button class="btn-export" onclick="exportTroca()">📋 COPIAR LISTA COMPLETA</button>
+        <div class="export-msg" id="export-msg"></div>
+        <div class="export-preview" id="export-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Tab: Andamento ─── -->
+  <div id="tab-andamento" class="tab-pane">
+    <div class="tab-inner">
+      <div class="section-title">📊 Andamento</div>
+      <div class="and-filter" id="and-filter"></div>
+      <div id="and-container"></div>
+    </div>
+  </div>
+
+  <!-- ─── Bottom Nav ─── -->
+  <nav class="bot-nav" id="bot-nav">
+    <button class="bnav-btn active" data-tab="album" onclick="switchTab('album')">
+      <span class="bnav-icon">📋</span>Álbum
+    </button>
+    <button class="bnav-btn" data-tab="dinheiro" onclick="switchTab('dinheiro')">
+      <span class="bnav-icon">💰</span>R$
+    </button>
+    <button class="bnav-btn" data-tab="troca" onclick="switchTab('troca')">
+      <span class="bnav-icon">🔄</span>Troca
+    </button>
+    <button class="bnav-btn" data-tab="andamento" onclick="switchTab('andamento')">
+      <span class="bnav-icon">📊</span>Andamento
+    </button>
+  </nav>
+
+
+</div><!-- #scr-album -->
+</div><!-- #app -->
+
+<script>
+// ── Detecta navegador interno ──
+(function(){
+  var ua=navigator.userAgent||'';
+  var isAndroidWebView=/wv/.test(ua)&&/Android/.test(ua);
+  var isIOSInApp=/iPhone|iPad|iPod/.test(ua)&&!/Safari/.test(ua)&&/AppleWebKit/.test(ua);
+  var isKnownInApp=/WhatsApp|Telegram|FBAN|FBAV|Instagram|Line|Snapchat/.test(ua);
+  if(isAndroidWebView||isIOSInApp||isKnownInApp){document.getElementById('inapp-warn').classList.add('show');}
+})();
+
+// ── Usuários ──
+var USERS={
+  user01:"7555",user02:"6699",user03:"8840",user04:"2266",user05:"9944",
+  user06:"8844",user07:"7336",user08:"7036",user09:"5533",user10:"5599",
+  user11:"7819",user12:"5577",user13:"3399",user14:"3366",user15:"3728",
+  user16:"8777",user17:"5599",user18:"4822",user19:"9922",user20:"5565",
+  user21:"6699",user22:"9933",user23:"6633",user24:"9977",user25:"2294",
+  user26:"2255",user27:"9933",user28:"9345",user29:"5344",user30:"2222",
+  user31:"8888",user32:"6398",user33:"6695",user34:"9933",user35:"2244",
+  user36:"3333",user37:"3696",user38:"8844",user39:"8866",user40:"9858",
+  user41:"6377",user42:"6677",user43:"9771",user44:"9377",user45:"8686",
+  user46:"6633",user47:"4477",user48:"1637",user49:"8981",user50:"9684"
+};
+
+// ── Álbum ──
+var ALBUM=[
+  {id:"A",cls:"ga",label:"Grupo A",sels:[{c:"MEX",n:"México"},{c:"RSA",n:"África do Sul"},{c:"KOR",n:"Coreia do Sul"},{c:"CZE",n:"Rep. Tcheca"}]},
+  {id:"B",cls:"gb",label:"Grupo B",sels:[{c:"CAN",n:"Canadá"},{c:"BIH",n:"Bósnia"},{c:"QAT",n:"Catar"},{c:"SUI",n:"Suíça"}]},
+  {id:"C",cls:"gc2",label:"Grupo C",sels:[{c:"BRA",n:"Brasil"},{c:"MAR",n:"Marrocos"},{c:"HAI",n:"Haiti"},{c:"SCO",n:"Escócia"}]},
+  {id:"D",cls:"gd",label:"Grupo D",sels:[{c:"USA",n:"EUA"},{c:"PAR",n:"Paraguai"},{c:"AUS",n:"Austrália"},{c:"TUR",n:"Turquia"}]},
+  {id:"E",cls:"ge",label:"Grupo E",sels:[{c:"GER",n:"Alemanha"},{c:"CUW",n:"Curaçao"},{c:"CIV",n:"Costa do Marfim"},{c:"ECU",n:"Equador"}]},
+  {id:"F",cls:"gf",label:"Grupo F",sels:[{c:"NED",n:"Holanda"},{c:"JPN",n:"Japão"},{c:"SWE",n:"Suécia"},{c:"TUN",n:"Tunísia"}]},
+  {id:"G",cls:"gg",label:"Grupo G",sels:[{c:"BEL",n:"Bélgica"},{c:"EGY",n:"Egito"},{c:"IRN",n:"Irã"},{c:"NZL",n:"Nova Zelândia"}]},
+  {id:"H",cls:"gh",label:"Grupo H",sels:[{c:"ESP",n:"Espanha"},{c:"CPV",n:"Cabo Verde"},{c:"KSA",n:"Arábia Saudita"},{c:"URU",n:"Uruguai"}]},
+  {id:"I",cls:"gi",label:"Grupo I",sels:[{c:"FRA",n:"França"},{c:"SEN",n:"Senegal"},{c:"IRQ",n:"Iraque"},{c:"NOR",n:"Noruega"}]},
+  {id:"J",cls:"gj",label:"Grupo J",sels:[{c:"ARG",n:"Argentina"},{c:"ALG",n:"Argélia"},{c:"AUT",n:"Áustria"},{c:"JOR",n:"Jordânia"}]},
+  {id:"K",cls:"gk",label:"Grupo K",sels:[{c:"POR",n:"Portugal"},{c:"COD",n:"RD Congo"},{c:"UZB",n:"Uzbequistão"},{c:"COL",n:"Colômbia"}]},
+  {id:"L",cls:"gl",label:"Grupo L",sels:[{c:"ENG",n:"Inglaterra"},{c:"CRO",n:"Croácia"},{c:"GHA",n:"Gana"},{c:"PAN",n:"Panamá"}]},
+  {id:"X",cls:"gx",label:"Especiais FWC",sels:[{c:"FWC",n:"FWC / Especiais",count:20,start:0}]},
+  {id:"Z",cls:"gz",label:"Coca-Cola",sels:[{c:"COCA",n:"Coca-Cola",count:14}]}
+];
+
+var cu=null, ud={};
+
+// ── Storage ──
+function lk(u){return 'copa26_'+u;}
+function save(){try{localStorage.setItem(lk(cu),JSON.stringify(ud));}catch(e){}}
+function load(u){try{var s=localStorage.getItem(lk(u));return s?JSON.parse(s):{};}catch(e){return{};}}
+
+// ── Login / Logout ──
+function doLogin(){
+  var u=(document.getElementById('inp-u').value||'').trim().toLowerCase();
+  var p=(document.getElementById('inp-p').value||'').trim();
+  var err=document.getElementById('login-err');
+  if(!u||!p){err.textContent='Preencha usuário e senha.';return;}
+  if(!USERS[u]){err.textContent='Usuário não encontrado.';return;}
+  if(USERS[u]!==p){err.textContent='Senha incorreta.';return;}
+  err.textContent='';
+  cu=u; ud=load(u);
+  document.getElementById('scr-login').classList.remove('active');
+  document.getElementById('scr-album').classList.add('active');
+  document.getElementById('lbl-user').textContent=u;
+  document.getElementById('bot-nav').classList.add('visible');
+  switchTab('album');
+  renderAlbum();
+  updateStats();
+  buildTrocaSelects();
+  renderDinheiro();
+}
+
+function doLogout(){
+  cu=null; ud={};
+  document.getElementById('inp-u').value='';
+  document.getElementById('inp-p').value='';
+  document.getElementById('scr-album').classList.remove('active');
+  document.getElementById('scr-login').classList.add('active');
+  document.getElementById('bot-nav').classList.remove('visible');
+  // reset troca
+  document.getElementById('troca-result').textContent='Selecione e clique em verificar';
+  document.getElementById('troca-result').style.color='#6b8570';
+  document.getElementById('export-msg').textContent='';
+  document.getElementById('export-preview').classList.remove('show');
+  // reset andamento
+  andFilter='all';
+  document.getElementById('and-filter').innerHTML='';
+  document.getElementById('and-container').innerHTML='';
+}
+
+// ── Tab navigation ──
+function switchTab(tab){
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+tab).classList.add('active');
+  var btn=document.querySelector('[data-tab="'+tab+'"]');
+  if(btn) btn.classList.add('active');
+  if(tab==='andamento') renderAndamento();
+  if(tab==='dinheiro') renderDinheiro();
+}
+
+// ── Álbum ──
+function toggle(k){
+  ud[k]=!ud[k];
+  var b=document.getElementById('b'+k);
+  if(b) b.classList.toggle('have',!!ud[k]);
+  updateStats(); save();
+}
+
+function renderAlbum(){
+  var g=document.getElementById('grid'); g.innerHTML='';
+  for(var i=0;i<ALBUM.length;i++){
+    var grp=ALBUM[i],gt=0,gh=0;
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1;
+      for(var n=st;n<st+cnt;n++){gt++;if(ud[s.c+'_'+n])gh++;}
+    }
+    var card=document.createElement('div');
+    card.className='gc-card '+grp.cls;
+    var html='<div class="gc-head"><div class="gc-left"><div class="gc-letter">'+grp.id+'</div><div class="gc-name">'+grp.label+'</div></div><span class="gc-prog" id="gp'+grp.id+'">'+gh+'/'+gt+'</span></div>';
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1,btns='';
+      for(var n=st;n<st+cnt;n++){
+        var k=s.c+'_'+n;
+        btns+='<button id="b'+k+'" class="fb'+(ud[k]?' have':'')+'" onclick="toggle(\''+k+'\')">'+n+'</button>';
+      }
+      html+='<div class="sel"><div class="sel-n">'+s.n+'</div><div class="figs">'+btns+'</div></div>';
+    }
+    card.innerHTML=html; g.appendChild(card);
+  }
+}
+
+function countHave(){
+  var have=0;
+  for(var i=0;i<ALBUM.length;i++){
+    var grp=ALBUM[i];
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1;
+      for(var n=st;n<st+cnt;n++){if(ud[s.c+'_'+n])have++;}
+    }
+  }
+  return have;
+}
+
+function updateStats(){
+  var total=0,have=0;
+  for(var i=0;i<ALBUM.length;i++){
+    var grp=ALBUM[i],gt=0,gh=0;
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1;
+      for(var n=st;n<st+cnt;n++){total++;gt++;if(ud[s.c+'_'+n]){have++;gh++;}}
+    }
+    var el=document.getElementById('gp'+grp.id);
+    if(el) el.textContent=gh+'/'+gt;
+  }
+  var pct=total?Math.round(have/total*100):0;
+  document.getElementById('s-have').textContent=have;
+  document.getElementById('s-miss').textContent=total-have;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-txt').textContent=have+' de '+total;
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+// ══════════════════════════════════════
+// ── $ TAB ──
+// ══════════════════════════════════════
+function getPacotes(){return ud._pacotes||0;}
+
+function changePacotes(delta){
+  var n=Math.max(0,(ud._pacotes||0)+delta);
+  ud._pacotes=n;
+  save();
+  renderDinheiro();
+}
+
+function renderDinheiro(){
+  var n=getPacotes();
+  var total=n*7;
+  var figs=n*7;
+  var haveCount=countHave();
+  document.getElementById('pac-count').textContent=n;
+  document.getElementById('pac-total').textContent='R$\u00a0'+total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('pac-figs').textContent='~'+figs;
+  document.getElementById('pac-have2').textContent=haveCount;
+}
+
+// ══════════════════════════════════════
+// ── TROCA TAB ──
+// ══════════════════════════════════════
+function buildTrocaSelects(){
+  var sel=document.getElementById('troca-sel');
+  sel.innerHTML='';
+  for(var i=0;i<ALBUM.length;i++){
+    var grp=ALBUM[i];
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j];
+      var opt=document.createElement('option');
+      opt.value=s.c;
+      opt.textContent=s.n;
+      opt.dataset.count=String(s.count||20);
+      opt.dataset.start=String(s.start!==undefined?s.start:1);
+      sel.appendChild(opt);
+    }
+  }
+  updateTrocaNumbers();
+}
+
+function updateTrocaNumbers(){
+  var sel=document.getElementById('troca-sel');
+  var chosen=sel.options[sel.selectedIndex];
+  var startStr=chosen.dataset.start;
+  var start=(startStr!==undefined&&startStr!=='')?parseInt(startStr):1;
+  var count=parseInt(chosen.dataset.count)||20;
+  var numSel=document.getElementById('troca-num');
+  numSel.innerHTML='';
+  for(var i=start;i<start+count;i++){
+    var opt=document.createElement('option');
+    opt.value=i; opt.textContent=i;
+    numSel.appendChild(opt);
+  }
+  var res=document.getElementById('troca-result');
+  res.textContent='Selecione e clique em verificar';
+  res.style.color='#6b8570';
+}
+
+function searchTroca(){
+  var selEl=document.getElementById('troca-sel');
+  var cc=selEl.value;
+  var num=document.getElementById('troca-num').value;
+  var selName=selEl.options[selEl.selectedIndex].textContent;
+  var key=cc+'_'+num;
+  var have=!!ud[key];
+  var res=document.getElementById('troca-result');
+  if(have){
+    res.innerHTML='✅ Você&nbsp;<strong>TEM</strong>&nbsp;a figurinha&nbsp;<em style="color:#f0f4f0">'+selName+' #'+num+'</em>';
+    res.style.color='#00c853';
+  } else {
+    res.innerHTML='❌ Você&nbsp;<strong>NÃO tem</strong>&nbsp;a figurinha&nbsp;<em style="color:#f0f4f0">'+selName+' #'+num+'</em>';
+    res.style.color='#ff6b6b';
+  }
+}
+
+function exportTroca(){
+  var lines=['ColecionaAí · Copa 2026  |  '+cu];
+  lines.push('════════════════════════════════════');
+  for(var i=0;i<ALBUM.length;i++){
+    var grp=ALBUM[i];
+    lines.push('');
+    lines.push('▶ '+grp.label.toUpperCase());
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j];
+      var cnt=s.count||20;
+      var st=s.start!==undefined?s.start:1;
+      lines.push('  '+s.n+':');
+      var row='  ';
+      for(var n=st;n<st+cnt;n++){
+        var key=s.c+'_'+n;
+        row+=(ud[key]?'✅':'❌')+n+' ';
+        if((n-st+1)%10===0&&n<st+cnt-1){lines.push(row);row='  ';}
+      }
+      if(row.trim()) lines.push(row);
+    }
+  }
+  var text=lines.join('\n');
+
+  // Mostrar prévia
+  var prev=document.getElementById('export-preview');
+  prev.textContent=text;
+  prev.classList.add('show');
+
+  // Copiar
+  var msg=document.getElementById('export-msg');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      msg.textContent='✅ Lista copiada para a área de transferência!';
+      setTimeout(function(){msg.textContent='';},4000);
+    }).catch(function(){fallbackCopy(text,msg);});
+  } else {
+    fallbackCopy(text,msg);
+  }
+}
+
+function fallbackCopy(text,msg){
+  var ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;top:-9999px;left:0;opacity:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{document.execCommand('copy');msg.textContent='✅ Lista copiada!';}
+  catch(e){msg.textContent='⚠️ Não foi possível copiar automaticamente. Veja a prévia abaixo.';}
+  document.body.removeChild(ta);
+  setTimeout(function(){msg.textContent='';},4000);
+}
+
+// ══════════════════════════════════════
+// ── ANDAMENTO TAB ──
+// ══════════════════════════════════════
+var andFilter='all';
+
+function buildAndFilter(){
+  var f=document.getElementById('and-filter');
+  f.innerHTML='';
+  var chip=makeChip('Todos','all',true);
+  f.appendChild(chip);
+  for(var i=0;i<ALBUM.length;i++){
+    var cl=(ALBUM[i].id==='X'||ALBUM[i].id==='Z')?ALBUM[i].label:'Grupo '+ALBUM[i].id;
+    f.appendChild(makeChip(cl,ALBUM[i].id,false));
+  }
+}
+
+function makeChip(label,id,active){
+  var btn=document.createElement('button');
+  btn.className='and-chip'+(active?' active':'');
+  btn.textContent=label;
+  btn.dataset.id=id;
+  btn.onclick=(function(id){return function(){setAndFilter(id);};})(id);
+  return btn;
+}
+
+function setAndFilter(id){
+  andFilter=id;
+  document.querySelectorAll('.and-chip').forEach(function(c){
+    c.classList.toggle('active',c.dataset.id===id);
+  });
+  renderAndamento();
+}
+
+function renderAndamento(){
+  if(!document.getElementById('and-filter').children.length) buildAndFilter();
+  var container=document.getElementById('and-container');
+  container.innerHTML='';
+  var groups=andFilter==='all'?ALBUM:ALBUM.filter(function(g){return g.id===andFilter;});
+
+  for(var i=0;i<groups.length;i++){
+    var grp=groups[i];
+    var grpTotal=0,grpHave=0;
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1;
+      for(var n=st;n<st+cnt;n++){grpTotal++;if(ud[s.c+'_'+n])grpHave++;}
+    }
+    var complete=(grpHave===grpTotal&&grpTotal>0);
+    var pct=grpTotal?Math.round(grpHave/grpTotal*100):0;
+
+    var card=document.createElement('div');
+    card.className='and-group-card gc-card '+grp.cls;
+
+    var html='<div class="gc-head">'+
+      '<div class="gc-left">'+
+        '<div class="gc-letter">'+grp.id+'</div>'+
+        '<div>'+
+          '<div class="gc-name">'+grp.label+'</div>'+
+          '<div class="gc-prog">'+(complete?'🏆 Completo!':grpHave+'/'+grpTotal+' · faltam '+(grpTotal-grpHave))+'</div>'+
+        '</div>'+
+      '</div>'+
+      (complete
+        ?'<span class="and-complete-badge">100%</span>'
+        :'<span style="font-size:14px;font-weight:700;color:#ffd600">'+pct+'%</span>')+
+    '</div>';
+
+    // Barra de progresso do grupo
+    html+='<div style="padding:6px 12px 8px;">'+
+      '<div class="prog-track"><div class="prog-fill" style="width:'+pct+'%"></div></div></div>';
+
+    // Por seleção
+    for(var j=0;j<grp.sels.length;j++){
+      var s=grp.sels[j],cnt=s.count||20,st=s.start!==undefined?s.start:1;
+      var missing=[],have=[];
+      for(var n=st;n<st+cnt;n++){
+        if(ud[s.c+'_'+n]) have.push(n);
+        else missing.push(n);
+      }
+      var selComplete=(missing.length===0&&cnt>0);
+      var selPct=cnt?Math.round(have.length/cnt*100):0;
+
+      html+='<div class="and-sel-block">'+
+        '<div class="and-sel-name">'+
+          '<span>'+s.n+'</span>'+
+          (selComplete
+            ?'<span style="color:#00c853;font-size:11px;font-weight:700">✓ Completo</span>'
+            :'<span style="color:#6b8570;font-size:11px">'+have.length+'/'+cnt+' &nbsp;'+selPct+'%</span>')+
+        '</div>';
+
+      if(missing.length>0){
+        html+='<div class="and-missing">❌ Faltando: '+missing.join(', ')+'</div>';
+      }
+      if(have.length>0){
+        html+='<div class="and-have">✅ Tenho: '+have.join(', ')+'</div>';
+      }
+      html+='</div>';
+    }
+
+    card.innerHTML=html;
+    container.appendChild(card);
+  }
+}
+
+// ── Teclado ──
+document.getElementById('inp-u').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-p').focus();});
+document.getElementById('inp-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+</script>
+
+</body>
+</html>
